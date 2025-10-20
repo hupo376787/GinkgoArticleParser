@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="GinkgoArticleParser.Views.SettingsPage"
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+  xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+  xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+  xmlns:vm="clr-namespace:GinkgoArticleParser.ViewModels"
+  x:DataType="vm:SettingsViewModel">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <!--<skia:SKLottieView
+      Margin="32"
+      RepeatCount="-1"
+      RepeatMode="Restart"
+      Source="AI.json" />-->
+    <Image
+      Margin="32"
+      HeightRequest="200"
+      Source="logo.png" />
+
+    <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center">
+      <material:ButtonView
+        Margin="16"
+        BackgroundColor="Orange"
+        HeightRequest="38"
+        TappedCommand="{Binding ImportCommand}"
+        WidthRequest="160">
+        <HorizontalStackLayout HorizontalOptions="Center">
+          <Image>
+            <Image.Source>
+              <FontImageSource
+                FontFamily="FASolid"
+                Glyph="{x:Static fa:Solid.FileImport}"
+                Size="88"
+                Color="White" />
+            </Image.Source>
+          </Image>
+          <Label
+            Margin="16,0,0,0"
+            Text="导入数据库"
+            TextColor="White" />
+        </HorizontalStackLayout>
+      </material:ButtonView>
+      <material:ButtonView
+        Grid.Row="1"
+        Margin="16"
+        BackgroundColor="Orange"
+        HeightRequest="38"
+        TappedCommand="{Binding ExportCommand}"
+        WidthRequest="160">
+        <HorizontalStackLayout HorizontalOptions="Center">
+          <Image>
+            <Image.Source>
+              <FontImageSource
+                FontFamily="FASolid"
+                Glyph="{x:Static fa:Solid.FileExport}"
+                Size="88"
+                Color="White" />
+            </Image.Source>
+          </Image>
+          <Label
+            Margin="16,0,0,0"
+            Text="导出数据库"
+            TextColor="White" />
+        </HorizontalStackLayout>
+      </material:ButtonView>
+    </HorizontalStackLayout>
+
+    <VerticalStackLayout Grid.Row="2" HorizontalOptions="Center">
+      <Label FontSize="18" Text="微信文章图片下载" />
+
+      <Label
+        Margin="0,16,0,0"
+        HorizontalOptions="Center"
+        Text="V1.0" />
+    </VerticalStackLayout>
+  </Grid>
+
+
+</ContentPage>

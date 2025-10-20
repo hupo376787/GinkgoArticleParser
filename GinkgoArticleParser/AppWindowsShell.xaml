@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+  x:Class="GinkgoArticleParser.AppWindowsShell"
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
+  xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+  xmlns:local="clr-namespace:GinkgoArticleParser"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:views="clr-namespace:GinkgoArticleParser.Views"
+  Title="银杏图片解析"
+  mc:Ignorable="d">
+
+  <!--  虽然Shell.NavBarIsVisible="False"都是False，但是汉堡菜单在安卓下会不显示，无法切换到其他页面。而TabBar可以  -->
+  <ShellContent
+    Title="首页"
+    ContentTemplate="{DataTemplate views:MainPage}"
+    Route="MainPage"
+    Shell.NavBarIsVisible="False">
+    <ShellContent.Icon>
+      <FontImageSource
+        FontFamily="FASolid"
+        Glyph="{x:Static fa:Solid.Download}"
+        Color="Orange" />
+    </ShellContent.Icon>
+  </ShellContent>
+  <ShellContent
+    Title="历史"
+    ContentTemplate="{DataTemplate views:HistoryPage}"
+    Route="HistoryPage"
+    Shell.NavBarIsVisible="False">
+    <ShellContent.Icon>
+      <FontImageSource
+        FontFamily="FASolid"
+        Glyph="{x:Static fa:Solid.ClockRotateLeft}"
+        Color="Orange" />
+    </ShellContent.Icon>
+  </ShellContent>
+  <ShellContent
+    Title="设置"
+    ContentTemplate="{DataTemplate views:SettingsPage}"
+    Route="SettingsPage"
+    Shell.NavBarIsVisible="False">
+    <ShellContent.Icon>
+      <FontImageSource
+        FontFamily="FASolid"
+        Glyph="{x:Static fa:Solid.UserGear}"
+        Color="Orange" />
+    </ShellContent.Icon>
+  </ShellContent>
+
+
+</Shell>

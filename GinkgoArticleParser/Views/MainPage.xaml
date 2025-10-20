@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="GinkgoArticleParser.Views.MainPage"
+  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+  xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
+  xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+  xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+  xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+  xmlns:vm="clr-namespace:GinkgoArticleParser.ViewModels"
+  x:DataType="vm:MainViewModel">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.RowSpan="2">
+      <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+      <Border BackgroundColor="White" Opacity="0.7" />
+    </Grid>
+
+    <!--  插入一个icon字体  -->
+    <Image
+      Margin="16"
+      HorizontalOptions="End"
+      VerticalOptions="Start"
+      WidthRequest="24">
+      <Image.Source>
+        <FontImageSource
+          FontFamily="FASolid"
+          Glyph="{x:Static fa:Solid.CircleInfo}"
+          Color="#ffffff" />
+      </Image.Source>
+      <Image.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding OnInfoTappedCommand}" NumberOfTapsRequired="1" />
+      </Image.GestureRecognizers>
+    </Image>
+
+    <VerticalStackLayout Grid.Row="1">
+      <material:TextField
+        Title="输入文章URL"
+        Margin="32,0"
+        AllowClear="True"
+        Icon="{FontImageSource FontFamily=MaterialSharp,
+                               Glyph={x:Static m:MaterialSharp.Link}}"
+        Text="{Binding Url}" />
+
+      <material:RadioButtonGroupView
+        Margin="0,36,0,0"
+        HorizontalOptions="Center"
+        Orientation="Horizontal">
+        <material:RadioButton IsChecked="{Binding IsArticleChecked}" Text="文章图片" />
+        <material:RadioButton
+          Margin="32,0,0,0"
+          IsChecked="{Binding IsCoverChecked}"
+          Text="封面图片" />
+      </material:RadioButtonGroupView>
+
+      <material:ButtonView
+        Margin="0,32,0,0"
+        BackgroundColor="Orange"
+        HeightRequest="38"
+        TappedCommand="{Binding DownloadCommand}"
+        WidthRequest="90">
+        <Image>
+          <Image.Source>
+            <FontImageSource
+              FontFamily="FASolid"
+              Glyph="{x:Static fa:Solid.Download}"
+              Size="88"
+              Color="White" />
+          </Image.Source>
+        </Image>
+      </material:ButtonView>
+
+    </VerticalStackLayout>
+
+    <!--  Progress Indicator  -->
+    <Label
+      Grid.Row="1"
+      Margin="0,0,0,12"
+      HorizontalOptions="Center"
+      LineBreakMode="WordWrap"
+      Text="{Binding DownloadPathHint}"
+      TextColor="Gray"
+      VerticalOptions="End" />
+    <ProgressBar
+      Grid.Row="1"
+      Background="Transparent"
+      HeightRequest="8"
+      Progress="{Binding ProgressValue}"
+      VerticalOptions="End" />
+  </Grid>
+</ContentPage>
