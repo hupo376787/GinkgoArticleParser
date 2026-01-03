@@ -8,7 +8,7 @@
   xmlns:views="clr-namespace:GinkgoArticleParser.Views"
   Title="银杏图片解析">
 
-  <TabBar>
+  <TabBar >
     <ShellContent
       Title="首页"
       ContentTemplate="{DataTemplate views:MainPage}"

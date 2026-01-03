@@ -3,13 +3,15 @@
   x:Class="GinkgoArticleParser.Views.HistoryPage"
   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:apes="http://apes.ge"
+  xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+  xmlns:ct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
   xmlns:mm="clr-namespace:GinkgoArticleParser.Models"
   xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
   xmlns:vm="clr-namespace:GinkgoArticleParser.ViewModels"
   x:Name="RootPage">
   <Grid RowDefinitions="*,Auto">
-
     <CollectionView
       ItemSizingStrategy="MeasureFirstItem"
       ItemsSource="{Binding HistoryItems}"
@@ -29,20 +31,65 @@
 
       <CollectionView.ItemTemplate>
         <DataTemplate>
-          <HorizontalStackLayout Padding="18">
-            <Label
-              Text="{Binding Id}"
-              TextColor="Gray"
-              VerticalOptions="Center" />
-            <VerticalStackLayout Margin="18,0,0,0">
-              <Label Text="{Binding Title}" TextColor="Gray" />
-              <Label Text="{Binding Url}" TextColor="Gray" />
-            </VerticalStackLayout>
+          <apes:ContextMenuContainer LongPressDelay="200">
+            <apes:ContextMenuContainer.MenuItems>
+              <apes:ContextMenuItem
+                Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.CopyUrlCommand}"
+                CommandParameter="{Binding .}"
+                Text="复制链接" />
+              <apes:ContextMenuItem
+                Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.DeleteHistoryItemCommand}"
+                CommandParameter="{Binding .}"
+                IsDestructive="True"
+                Text="删除记录" />
+            </apes:ContextMenuContainer.MenuItems>
+            <apes:ContextMenuContainer.Content>
+              <HorizontalStackLayout Padding="18">
+                <!--<FlyoutBase.ContextFlyout>
+                  <MenuFlyout>
+                    <MenuFlyoutItem
+                      Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.CopyUrlCommand}"
+                      CommandParameter="{Binding .}"
+                      Text="复制链接" />
+                    <MenuFlyoutItem
+                      Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.DeleteHistoryItemCommand}"
+                      CommandParameter="{Binding .}"
+                      Text="删除记录" />
+                  </MenuFlyout>
+                </FlyoutBase.ContextFlyout>-->
 
-            <HorizontalStackLayout.GestureRecognizers>
-              <TapGestureRecognizer Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.HistoryItemTappedCommand}" CommandParameter="{Binding .}" />
-            </HorizontalStackLayout.GestureRecognizers>
-          </HorizontalStackLayout>
+
+                <Border
+                  Background="#88ffa500"
+                  HeightRequest="32"
+                  StrokeThickness="0"
+                  WidthRequest="32">
+                  <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16" />
+                  </Border.StrokeShape>
+                  <Label
+                    HorizontalOptions="Center"
+                    Text="{Binding Id}"
+                    TextColor="Gray"
+                    VerticalOptions="Center" />
+                </Border>
+                <VerticalStackLayout Margin="18,0,0,0">
+                  <Label Text="{Binding Title}" TextColor="Orange" />
+                  <Label Text="{Binding Url}" TextColor="Gray" />
+                  <HorizontalStackLayout>
+                    <Label Text="下载日期: " TextColor="Gray" />
+                    <Label Text="{Binding DowloadDateTime}" TextColor="Gray" />
+                  </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout.GestureRecognizers>
+                  <TapGestureRecognizer Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.HistoryItemTappedCommand}" CommandParameter="{Binding .}" />
+                </HorizontalStackLayout.GestureRecognizers>
+              </HorizontalStackLayout>
+            </apes:ContextMenuContainer.Content>
+          </apes:ContextMenuContainer>
+
         </DataTemplate>
       </CollectionView.ItemTemplate>
     </CollectionView>

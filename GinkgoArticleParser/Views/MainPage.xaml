@@ -3,6 +3,7 @@
   x:Class="GinkgoArticleParser.Views.MainPage"
   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:controls="clr-namespace:GinkgoArticleParser.Views.Controls"
   xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
   xmlns:m="clr-namespace:UraniumUI.Icons.MaterialSymbols;assembly=UraniumUI.Icons.MaterialSymbols"
   xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
@@ -18,7 +19,8 @@
 
     <Grid Grid.RowSpan="2">
       <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
-      <Border BackgroundColor="White" Opacity="0.7" />
+      <!--  用系统主题自动切换背景色：亮色用白，暗色用黑，均带 70% 透明度  -->
+      <Border Margin="-2" BackgroundColor="{AppThemeBinding Light=#B3FFFFFF, Dark=#B3000000, Default=#B3FFFFFF}" />
     </Grid>
 
     <!--  插入一个icon字体  -->
@@ -45,10 +47,11 @@
         AllowClear="True"
         Icon="{FontImageSource FontFamily=MaterialSharp,
                                Glyph={x:Static m:MaterialSharp.Link}}"
+        ReturnCommand="{Binding DownloadCommand}"
         Text="{Binding Url}" />
 
-      <material:RadioButtonGroupView
-        Margin="0,36,0,0"
+      <!--<material:RadioButtonGroupView
+        Margin="0,24,0,0"
         HorizontalOptions="Center"
         Orientation="Horizontal">
         <material:RadioButton IsChecked="{Binding IsArticleChecked}" Text="文章图片" />
@@ -56,10 +59,40 @@
           Margin="32,0,0,0"
           IsChecked="{Binding IsCoverChecked}"
           Text="封面图片" />
-      </material:RadioButtonGroupView>
+      </material:RadioButtonGroupView>-->
 
-      <material:ButtonView
-        Margin="0,32,0,0"
+      <controls:MagicBorder
+        Margin="0,18,0,0"
+        AnimationSpeed="90"
+        Background="Transparent"
+        HeadClusterCount="6"
+        HeadStretch="8"
+        HeightRequest="60"
+        IsAnimating="True"
+        SnowflakeSize="1.6"
+        StrokeWidth="0"
+        TrackInset="0"
+        TrailPoints="40"
+        TrailSpacingRatio="0.008"
+        WidthRequest="180">
+        <material:ButtonView
+          BackgroundColor="Orange"
+          HeightRequest="48"
+          TappedCommand="{Binding DownloadCommand}"
+          WidthRequest="140">
+          <Image>
+            <Image.Source>
+              <FontImageSource
+                FontFamily="FASolid"
+                Glyph="{x:Static fa:Solid.Download}"
+                Size="88"
+                Color="White" />
+            </Image.Source>
+          </Image>
+        </material:ButtonView>
+      </controls:MagicBorder>
+      <!--<material:ButtonView
+        Margin="0,18,0,0"
         BackgroundColor="Orange"
         HeightRequest="38"
         TappedCommand="{Binding DownloadCommand}"
@@ -73,14 +106,22 @@
               Color="White" />
           </Image.Source>
         </Image>
-      </material:ButtonView>
+      </material:ButtonView>-->
+
+      <Label
+        Margin="8,18,8,0"
+        HorizontalOptions="Center"
+        HorizontalTextAlignment="Center"
+        LineBreakMode="WordWrap"
+        Text="支持微信公众号、微博、小红书、抖音、快手解析。更多平台敬请期待！"
+        TextColor="Gray" />
 
     </VerticalStackLayout>
 
     <!--  Progress Indicator  -->
     <Label
-      Grid.Row="1"
-      Margin="0,0,0,12"
+      Grid.RowSpan="2"
+      Margin="8,0,8,12"
       HorizontalOptions="Center"
       LineBreakMode="WordWrap"
       Text="{Binding DownloadPathHint}"
@@ -92,5 +133,43 @@
       HeightRequest="8"
       Progress="{Binding ProgressValue}"
       VerticalOptions="End" />
+
+    <!--  悬浮下载按钮（可拖拽）  -->
+    <Border
+      x:Name="FloatingActionButton"
+      Grid.RowSpan="2"
+      Margin="24"
+      Padding="0"
+      BackgroundColor="Orange"
+      HeightRequest="56"
+      HorizontalOptions="End"
+      IsVisible="{Binding FloatDownloadButtonVisible}"
+      Opacity="0.6"
+      SemanticProperties.Description="Download floating button"
+      StrokeShape="Ellipse"
+      VerticalOptions="End"
+      WidthRequest="56"
+      ZIndex="99">
+      <Border.Shadow>
+        <Shadow
+          Brush="Black"
+          Opacity="0.1"
+          Radius="6" />
+      </Border.Shadow>
+
+      <Border.GestureRecognizers>
+        <PanGestureRecognizer PanUpdated="FloatingActionButton_PanUpdated" />
+        <TapGestureRecognizer Command="{Binding DownloadCommand}" NumberOfTapsRequired="1" />
+      </Border.GestureRecognizers>
+
+      <Image HeightRequest="28" WidthRequest="28">
+        <Image.Source>
+          <FontImageSource
+            FontFamily="FASolid"
+            Glyph="{x:Static fa:Solid.Download}"
+            Color="White" />
+        </Image.Source>
+      </Image>
+    </Border>
   </Grid>
 </ContentPage>

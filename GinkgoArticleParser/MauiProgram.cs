@@ -1,4 +1,5 @@
-﻿using GinkgoArticleParser.Services;
+﻿using APES.MAUI;
+using GinkgoArticleParser.Services;
 using Microsoft.Maui.LifecycleEvents;
 using UraniumUI;
 
@@ -25,6 +26,7 @@ public static class MauiProgram
             {
                 options.SetShouldEnableSnackbarOnWindows(true);
             })
+            .ConfigureContextMenuContainer()
             .UseUraniumUI()
             .UseUraniumUIMaterial()
             .ConfigureLifecycleEvents(events =>
@@ -75,6 +77,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISqliteService, SqliteService>();
 
         builder.Services.AddSingleton(CalendarStore.Default);
+
+        builder.Services.AddSingleton<IArticleParser, Services.Parsers.WeChatArticleParser>();
+        builder.Services.AddSingleton<IArticleParser, Services.Parsers.WeiboArticleParser>();
+        builder.Services.AddSingleton<IArticleParser, Services.Parsers.XiaohongshuParser>();
+        builder.Services.AddSingleton<IArticleParser, Services.Parsers.DouyinParser>();
+        builder.Services.AddSingleton<IArticleParser, Services.Parsers.KuaishouParser>();
+
+        builder.Services.AddSingleton<IArticleParserResolver, ArticleParserResolver>();
 
         builder.Services.UsePageResolver();
 

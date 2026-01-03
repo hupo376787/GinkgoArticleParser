@@ -27,8 +27,25 @@ namespace GinkgoArticleParser.Services
         {
             // 注册需要自动建表的实体
             await _db.CreateTableAsync<HistoryModel>();
+            await _db.CreateTableAsync<SettingsModel>();
+
+            // 迁移：确保新增列存在（示例：BilibiliCookie）
+            await EnsureColumnAsync(nameof(SettingsModel), "BilibiliCookie", "TEXT");
             // 如果有更多实体可以继续加：
             // await _db.CreateTableAsync<Order>();
+        }
+
+        private async Task EnsureColumnAsync(string tableName, string columnName, string columnTypeSql)
+        {
+            // 查询当前表结构
+            var cols = await _db.GetTableInfoAsync(tableName);
+            bool exists = cols.Any(c =>
+                string.Equals(c.Name, columnName, StringComparison.OrdinalIgnoreCase));
+            if (exists) return;
+
+            // 添加新列（默认值为 NULL；如需默认值可在语句后加 DEFAULT 'xxx'）
+            var sql = $"ALTER TABLE {tableName} ADD COLUMN {columnName} {columnTypeSql}";
+            await _db.ExecuteAsync(sql);
         }
 
         public async Task CloseConnectionAsync()

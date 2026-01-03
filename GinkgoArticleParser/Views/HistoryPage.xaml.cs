@@ -6,9 +6,9 @@ public partial class HistoryPage : ContentPage
     {
         InitializeComponent();
         viewModel.Navigation = Navigation;
-        Loaded += (s, e) =>
+        Loaded += async (s, e) =>
         {
-            FetchData();
+            await FetchData();
         };
         BindingContext = viewModel;
     }

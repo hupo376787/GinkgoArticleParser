@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using GinkgoArticleParser.Helpers;
 using GinkgoArticleParser.Models;
 using GinkgoArticleParser.Services;
 using System.Windows.Input;
@@ -17,8 +18,12 @@ public partial class HistoryViewModel : BaseViewModel
 
     private int _currentPage = 1;
     private const int PageSize = 20;
+
     public ICommand LoadMoreAsyncCommand { get; }
     public ICommand HistoryItemTappedCommand { get; }
+    public ICommand ShowItemMenuCommand { get; }
+    public ICommand CopyUrlCommand { get; }
+    public ICommand DeleteHistoryItemCommand { get; }
 
     public HistoryViewModel(ISqliteService sqliteService)
     {
@@ -26,7 +31,8 @@ public partial class HistoryViewModel : BaseViewModel
 
         LoadMoreAsyncCommand = new Command(async () => await LoadMoreAsync());
         HistoryItemTappedCommand = new Command<HistoryModel>(HistoryItemTapped);
-
+        CopyUrlCommand = new Command<HistoryModel>(async (item) => await CopyUrlAsync(item));
+        DeleteHistoryItemCommand = new Command<HistoryModel>(async (item) => await DeleteHistoryItemAsync(item));
         //注册消息接收，当有新文章下载完成时，刷新列表
         WeakReferenceMessenger.Default.Register<string>("NewArticleDownloaded", async (r, m) =>
         {
@@ -57,6 +63,7 @@ public partial class HistoryViewModel : BaseViewModel
 
         Debug.WriteLine($"正在加载第{_currentPage}页");
         IsLoading = true;
+        await Task.Delay(500);
 
         // 调用示例：
         var items = await _sqliteService.GetPageAsync<HistoryModel>(_currentPage, PageSize, x => x.Id, descending: true);
@@ -80,5 +87,33 @@ public partial class HistoryViewModel : BaseViewModel
 
         //跳转到WebView页面
         await Navigation!.PushAsync(new WebViewPage(new WebViewViewModel(item.Url)));
+    }
+
+    private async Task CopyUrlAsync(HistoryModel item)
+    {
+        if (item?.Url == null) return;
+        await Clipboard.SetTextAsync(item.Url);
+        await ToastHelper.ShowToast($"已复制: {item.Title}");
+    }
+
+    private async Task DeleteHistoryItemAsync(HistoryModel item)
+    {
+        if (item == null) return;
+        bool confirm = true;
+#if WINDOWS || MACCATALYST || ANDROID || IOS
+        confirm = await Shell.Current.DisplayAlert("删除确认", $"确定删除该记录?\n{item.Title}", "删除", "取消");
+#endif
+        if (!confirm) return;
+
+        HistoryItems.Remove(item);
+        try
+        {
+            // 常规删除
+            await _sqliteService.DeleteAsync(item);
+        }
+        catch
+        {
+
+        }
     }
 }

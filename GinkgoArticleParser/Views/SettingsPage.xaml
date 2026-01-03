@@ -5,16 +5,16 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
   xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
   xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+  xmlns:models="clr-namespace:GinkgoArticleParser.Models"
   xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
-  xmlns:vm="clr-namespace:GinkgoArticleParser.ViewModels"
-  x:DataType="vm:SettingsViewModel">
+  xmlns:vm="clr-namespace:GinkgoArticleParser.ViewModels">
 
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
-      <RowDefinition />
-      <RowDefinition />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <!--<skia:SKLottieView
       Margin="32"
@@ -26,7 +26,82 @@
       HeightRequest="200"
       Source="logo.png" />
 
-    <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center">
+    <VerticalStackLayout
+      Grid.Row="1"
+      x:DataType="models:SettingsModel"
+      BindingContext="{Binding Settings}"
+      HorizontalOptions="Center">
+      <HorizontalStackLayout>
+        <Switch
+          HorizontalOptions="Start"
+          IsToggled="{Binding IsDownloadVibrate}"
+          MinimumWidthRequest="32" />
+        <Label
+          Margin="12,0,0,0"
+          Text="下载时震动提示(移动端生效)"
+          VerticalOptions="Center" />
+      </HorizontalStackLayout>
+      <HorizontalStackLayout>
+        <Switch
+          HorizontalOptions="Start"
+          IsToggled="{Binding IsFloatDownloadButtonVisible, Mode=TwoWay}"
+          MinimumWidthRequest="32" />
+        <Label
+          Margin="12,0,0,0"
+          Text="显示悬浮下载按钮"
+          VerticalOptions="Center" />
+      </HorizontalStackLayout>
+      <HorizontalStackLayout>
+        <Switch
+          HorizontalOptions="Start"
+          IsToggled="{Binding IsModifyFileDate}"
+          MinimumWidthRequest="32" />
+        <Label
+          Margin="12,0,0,0"
+          Text="修改文件创建日期"
+          VerticalOptions="Center" />
+      </HorizontalStackLayout>
+      <HorizontalStackLayout>
+        <Switch
+          HorizontalOptions="Start"
+          IsToggled="{Binding IsDateTimeStart}"
+          MinimumWidthRequest="32" />
+        <Label
+          Margin="12,0,0,0"
+          Text="文件命名日期在前"
+          VerticalOptions="Center" />
+      </HorizontalStackLayout>
+      <HorizontalStackLayout>
+        <Switch
+          HorizontalOptions="Start"
+          IsToggled="{Binding IsClassifyFolders, Mode=TwoWay}"
+          MinimumWidthRequest="32" />
+        <Label
+          Margin="12,0,0,0"
+          Text="按平台分类文件夹"
+          VerticalOptions="Center" />
+      </HorizontalStackLayout>
+      <HorizontalStackLayout>
+        <Switch
+          HorizontalOptions="Start"
+          IsToggled="{Binding IsFinishedShowTitle, Mode=TwoWay}"
+          MinimumWidthRequest="32" />
+        <Label
+          Margin="12,0,0,0"
+          Text="完成后显示标题"
+          VerticalOptions="Center" />
+      </HorizontalStackLayout>
+      <material:TextField
+        Title="微博Cookie (weibo.com)"
+        Margin="0,12,0,0"
+        AllowClear="True"
+        IsVisible="Collapse"
+        MaximumWidthRequest="300"
+        Text="{Binding WeiboComCookie, Mode=TwoWay}" />
+
+    </VerticalStackLayout>
+
+    <HorizontalStackLayout Grid.Row="2" HorizontalOptions="Center">
       <material:ButtonView
         Margin="16"
         BackgroundColor="Orange"
@@ -50,7 +125,6 @@
         </HorizontalStackLayout>
       </material:ButtonView>
       <material:ButtonView
-        Grid.Row="1"
         Margin="16"
         BackgroundColor="Orange"
         HeightRequest="38"
@@ -74,11 +148,11 @@
       </material:ButtonView>
     </HorizontalStackLayout>
 
-    <VerticalStackLayout Grid.Row="2" HorizontalOptions="Center">
-      <Label FontSize="18" Text="微信文章图片下载" />
+    <VerticalStackLayout Grid.Row="3" HorizontalOptions="Center">
+      <Label FontSize="18" Text="银杏文章解析器" />
 
       <Label
-        Margin="0,16,0,0"
+        Margin="0,12,0,0"
         HorizontalOptions="Center"
         Text="V1.0" />
     </VerticalStackLayout>
